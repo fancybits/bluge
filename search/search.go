@@ -264,7 +264,7 @@ type Searcher interface {
 type SearcherOptions struct {
 	SimilarityForField func(field string) Similarity
 	DefaultSearchField string
-	DefaultAnalyzer    *analysis.Analyzer
+	AnalyzerForField   func(field string) *analysis.Analyzer
 	Explain            bool
 	IncludeTermVectors bool
 	Score              string

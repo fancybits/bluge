@@ -804,8 +804,8 @@ func (q *MatchPhraseQuery) Searcher(i search.Reader, options search.SearcherOpti
 	var tokens analysis.TokenStream
 	if q.analyzer != nil {
 		tokens = q.analyzer.Analyze([]byte(q.matchPhrase))
-	} else if options.DefaultAnalyzer != nil {
-		tokens = options.DefaultAnalyzer.Analyze([]byte(q.matchPhrase))
+	} else if analyzer := options.AnalyzerForField(field); analyzer != nil {
+		tokens = analyzer.Analyze([]byte(q.matchPhrase))
 	} else {
 		tokens = tokenizer.MakeTokenStream([]byte(q.matchPhrase))
 	}
@@ -950,8 +950,8 @@ func (q *MatchQuery) Searcher(i search.Reader, options search.SearcherOptions) (
 	var tokens analysis.TokenStream
 	if q.analyzer != nil {
 		tokens = q.analyzer.Analyze([]byte(q.match))
-	} else if options.DefaultAnalyzer != nil {
-		tokens = options.DefaultAnalyzer.Analyze([]byte(q.match))
+	} else if analyzer := options.AnalyzerForField(field); analyzer != nil {
+		tokens = analyzer.Analyze([]byte(q.match))
 	} else {
 		tokens = tokenizer.MakeTokenStream([]byte(q.match))
 	}

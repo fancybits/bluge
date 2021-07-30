@@ -15,6 +15,7 @@
 package bluge
 
 import (
+	"github.com/blugelabs/bluge/analysis"
 	"github.com/blugelabs/bluge/search"
 	"github.com/blugelabs/bluge/search/aggregations"
 	"github.com/blugelabs/bluge/search/collector"
@@ -188,8 +189,13 @@ func searchOptionsFromConfig(config Config, options SearchOptions) search.Search
 			}
 			return config.DefaultSimilarity
 		},
+		AnalyzerForField:   func(field string) *analysis.Analyzer {
+			if pfa, ok := config.PerFieldAnalyzer[field]; ok {
+				return pfa
+			}
+			return config.DefaultSearchAnalyzer
+		},
 		DefaultSearchField: config.DefaultSearchField,
-		DefaultAnalyzer:    config.DefaultSearchAnalyzer,
 		Explain:            options.ExplainScores,
 		IncludeTermVectors: options.IncludeLocations,
 		Score:              options.Score,
